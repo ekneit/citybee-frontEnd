@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header
+        class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom"
+      >
+        <a
+          href="/"
+          class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
+        >
+          <svg class="bi me-2" width="40" height="32">
+            <use xlink:href="#bootstrap"></use>
+          </svg>
+          <span class="fs-4">Citybee</span>
+        </a>
+
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a href="./index.html" class="nav-link">Pagrindinis</a>
+          </li>
+          <li class="nav-item">
+            <a href="./models.html" class="nav-link">Visi Modeliai</a>
+          </li>
+          <li class="nav-item">
+            <a href="./vehicles.html" class="nav-link">Visi Automobiliai</a>
+          </li>
+          <li class="nav-item">
+            <a href="./addModel.html" class="nav-link">Pridėti Modelį</a>
+          </li>
+          <li class="nav-item">
+            <a href="./addVehicles.html" class="nav-link active"
+              >Pridėti Automobilį</a
+            >
+          </li>
+        </ul>
+      </header>
+    </div>
+    <main>
+      <div class="px-4 py-5 my-5 text-center">
+        <img
+          class="d-block mx-auto mb-4"
+          src="https://www.citybee.lt/themes/citybee/assets/media/images/auto-min.png"
+          alt=""
+          width="307"
+          height="121"
+        />
+        <h1 class="display-5 fw-bold">Pridėti Automobilį!</h1>
+        <div class="w-50 p-3 text-start mx-auto">
+          <form name="addModel">
+            <div class="mb-3">
+              <label for="carModel" class="form-label"
+                >Modelio Pavadinimas</label
+              >
+              <select
+                id="carModel"
+                class="form-select"
+                aria-label="Default select example"
+              ></select>
+            </div>
+            <div class="mb-3">
+              <label for="carPlateNumbers" class="form-label"
+                >Mašinos numeriai</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="carPlateNumbers"
+                aria-describedby="emailHelp"
+                placeholder="JSF999"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="countyCodes" class="form-label">Šalis</label>
+              <select
+                id="countyCodes"
+                class="form-select"
+                aria-label="Default select example"
+              >
+                <option>LT</option>
+                <option>LV</option>
+                <option>EE</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary orange-color">
+              Pridėti
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+    <script>
+      const URL = "https://citybee-backend-l8svm.ondigitalocean.app";
+
+      fetch(URL + "/models")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.length > 0) {
+            data.forEach((model) => {
+              const option = document.createElement("option");
+              option.textContent = model.name;
+              option.value = model.ID;
+              document.querySelector("#carModel").append(option);
+            });
+          } else {
+            alert("An issue has ocurred");
+          }
+        })
+        .catch((e) => catchError(e.message));
+
+      document.forms.addModel.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const moduleID = Number(e.target.elements.carModel.value);
+        const numberPlate = e.target.elements.carPlateNumbers.value.trim();
+        const countryLocation = e.target.elements.countyCodes.value;
+
+        console.log(moduleID, numberPlate, countryLocation);
+
+        const res = await fetch(URL + "/vehicles", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            moduleID,
+            numberPlate,
+            countryLocation,
+          }),
+        });
+        const data = await res.json();
+        if (data.error) {
+          alert(data.error);
+        }
+        if (data.message) {
+          alert(data.message);
+        }
+      });
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

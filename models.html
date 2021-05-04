@@ -50,28 +50,29 @@
     <main>
       <div class="container text-center">
         <h1 class="display-5 mt-2 mb-2 fw-bold">Visų Modelių Kaina</h1>
-
-        <table class="table" id="carModels">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Modeliai</th>
-              <th scope="col">Kaina (be PVM)</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <h1 class="display-5 mt-20 mb-20 fw-bold">Visi Modeliai</h1>
-        <table class="table" id="carModelsCount">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Modeliai</th>
-              <th scope="col">Kiekis</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="tables">
+          <table class="table" id="carModels">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Modeliai</th>
+                <th scope="col">Kaina (be PVM)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <h1 class="display-5 mt-20 mb-20 fw-bold">Visi Modeliai</h1>
+          <table class="table" id="carModelsCount">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Modeliai</th>
+                <th scope="col">Kiekis</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </main>
 
@@ -79,11 +80,13 @@
       const baseURL = "https://citybee-backend-l8svm.ondigitalocean.app";
 
       const displayError = (message) => {
-        document.querySelector("table").style.display = "none";
+        const tbody = document.querySelector(".tables");
+        tbody.innerHTML = "";
 
         const h1 = document.createElement("h1");
+        h1.style.textAlign = "center";
         h1.textContent = message;
-        document.body.append(h1);
+        tbody.append(h1);
       };
 
       const displayModels = (models) => {
