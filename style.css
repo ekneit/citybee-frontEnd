@@ -1,0 +1,18 @@
+.active {
+  background-color: #f26123 !important;
+}
+.orange-color {
+  border-color: #f26123 !important;
+  background-color: #f26123 !important;
+  color: white;
+}
+.nav-link {
+  color: black;
+}
+.nav-link:hover {
+  color: #f26123;
+}
+
+.nav-link > .active {
+  color: #fff !important;
+}
